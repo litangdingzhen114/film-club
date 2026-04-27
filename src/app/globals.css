@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+@theme {
+  --color-void: #0A0A0A;
+  --color-ash: #1A1A1A;
+  --color-ink: #3A3532;
+  --color-paper: #FAFAF8;
+  --shadow-soft-glow: 0 10px 40px -10px rgba(230, 215, 180, 0.4), 0 0 20px 0 rgba(240, 230, 200, 0.2);
+  --ease-cinematic: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+@layer base {
+  /* 昼夜反转全局变量重写层 */
+  :root.theme-inverted {
+    --color-void: #FAFAF8;
+    --color-ash: #EAEAEA;
+    --color-ink: #FAFAF8;
+    --color-paper: #0A0A0A;
+    --shadow-soft-glow: 0 10px 40px -10px rgba(255, 255, 255, 0.08), 0 0 20px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  :root {
+    background-color: var(--color-void);
+    color: var(--color-paper);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    cursor: none!important;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* 全局 SVG 噪点网络 */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 250 250' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.06'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-attachment: fixed;
+  }
+
+  body, main, section, article, div, span, button, input {
+    transition: background-color 0.8s var(--ease-cinematic), color 0.8s var(--ease-cinematic), border-color 0.8s var(--ease-cinematic), opacity 0.8s var(--ease-cinematic);
+  }
+
+  a, button, input, textarea, select {
+    cursor: none!important;
+  }
+
+  @media (pointer: coarse) {
+    :root, a, button {
+      cursor: auto!important;
+    }
+  }
+}
+
+@layer utilities {
+ .theme-split {
+    background-color: var(--color-ash);
+    color: var(--color-paper);
+  }
+ .theme-warm {
+    background-color: var(--color-paper)!important;
+    color: var(--color-ink)!important;
+  }
+}
