@@ -57,7 +57,8 @@ export default function InfiniteFilmStrip() {
     const calc = () => {
       const p = getParams(window.innerWidth);
       paramsRef.current = p;
-      groupWRef.current = (p.frameVW / 100) * window.innerWidth * FILMS.length;
+      const marginVW = parseFloat(p.marginR);
+      groupWRef.current = ((p.frameVW + marginVW) / 100) * window.innerWidth * FILMS.length;
       setIsMobile(window.innerWidth < 768);
     };
     calc();
@@ -126,9 +127,11 @@ export default function InfiniteFilmStrip() {
     posRef.current += (targetRef.current - posRef.current) * 0.08;
 
     if (gw > 0) {
-      const total = gw * LOOP;
-      while (targetRef.current < 0) { targetRef.current += gw; posRef.current += gw; }
-      while (targetRef.current > total) { targetRef.current -= gw; posRef.current -= gw; }
+      // 保持坐标始终在克隆数组的正中间（第5~6组之间），确保左右各有庞大的 DOM 缓冲池
+      const minTarget = gw * 5;
+      const maxTarget = gw * 6;
+      while (targetRef.current < minTarget) { targetRef.current += gw; posRef.current += gw; }
+      while (targetRef.current >= maxTarget) { targetRef.current -= gw; posRef.current -= gw; }
     }
 
     const track = trackRef.current;
@@ -186,24 +189,29 @@ export default function InfiniteFilmStrip() {
   };
 
   const nudge = (dir: number) => {
-    targetRef.current += dir * (paramsRef.current.frameVW / 100) * window.innerWidth;
+    const marginVW = parseFloat(paramsRef.current.marginR);
+    targetRef.current += dir * ((paramsRef.current.frameVW + marginVW) / 100) * window.innerWidth;
   };
 
   /* ─── 主题色 ─── */
-  const bgGrad = isDark
-    ? "radial-gradient(ellipse 80% 60% at 50% 45%, #d8d0e8 0%, #e8e4f0 50%, #f0eef5 100%)"
-    : "radial-gradient(ellipse 80% 60% at 50% 45%, #1a1040 0%, #0c0c1a 50%, #050508 100%)";
+  const getBgGrad = () => {
+    // 统一使用经典银色/纯粹黑色的3D感作为背景氛围灯
+    return isDark
+      ? "radial-gradient(ellipse 80% 60% at 50% 45%, #e8e8e8 0%, #f5f5f5 50%, #fafafa 100%)"
+      : "radial-gradient(ellipse 80% 60% at 50% 45%, #1f1f1f 0%, #0a0a0a 50%, #000000 100%)";
+  };
+  const bgGrad = getBgGrad();
   const filmBase = isDark ? "#e0ddd5" : "#1c1c22";
   const filmBorder = isDark ? "rgba(0,0,0,0.08)" : "rgba(255,255,255,0.06)";
   const holeColor = isDark ? "#c8c4bc" : "#111";
   const holeBorder = isDark ? "rgba(0,0,0,0.06)" : "rgba(255,255,255,0.06)";
-  const titleColor = isDark ? "text-void" : "text-white";
-  const subColor = isDark ? "text-void/40" : "text-white/40";
+  const titleColor = isDark ? "text-black" : "text-white";
+  const subColor = isDark ? "text-black/40" : "text-white/40";
   const divColor = isDark ? "rgba(0,0,0,0.1)" : "rgba(255,255,255,0.08)";
 
   const getFC = (filmDark: boolean) => {
-    if (isDark) return { bg: filmDark ? "#fafaf8" : "#f0ece4", text: "#111" };
-    return { bg: filmDark ? "#0a0a0a" : "#f5f0e8", text: filmDark ? "#fff" : "#111" };
+    if (isDark) return { bg: filmDark ? "#fafaf8" : "#f0ece4", text: "#111111" };
+    return { bg: filmDark ? "#0a0a0a" : "#f5f0e8", text: filmDark ? "#ffffff" : "#111111" };
   };
 
   const p = paramsRef.current;
@@ -237,7 +245,7 @@ export default function InfiniteFilmStrip() {
             className="mt-2 md:mt-4 flex flex-col md:flex-row items-center justify-center gap-1 md:gap-3">
             <span className={`font-mono text-[10px] md:text-xs tracking-[0.3em] md:tracking-[0.4em] uppercase ${subColor} transition-colors duration-700`}>{activeFilm.desc}</span>
             <span className={`hidden md:inline ${isDark ? "text-void/30" : "text-white/30"}`}>·</span>
-            <span className={`font-mono text-[10px] md:text-xs tracking-[0.3em] uppercase cursor-pointer transition-colors pointer-events-auto ${isDark ? "text-void/50 hover:text-void/80" : "text-white/50 hover:text-white/80"}`}
+            <span className={`font-mono text-[10px] md:text-xs tracking-[0.3em] uppercase cursor-pointer transition-colors pointer-events-auto ${isDark ? "text-black/50 hover:text-black/80" : "text-white/50 hover:text-white/80"}`}
               onClick={() => handleNav(activeFilm.id)}>View project →</span>
           </motion.div>
         </div>
@@ -313,29 +321,43 @@ export default function InfiniteFilmStrip() {
           </div>
         </div>
 
-        {/* 左右箭头 */}
-        <button className={`absolute left-3 md:left-8 bottom-6 md:bottom-8 z-30 w-10 h-10 md:w-12 md:h-12 backdrop-blur-sm border rounded-lg flex items-center justify-center transition-colors text-sm md:text-base ${isDark ? "bg-white/60 border-void/10 text-void hover:bg-void/10" : "bg-black/60 border-white/10 text-white hover:bg-white/10"}`}
-          onClick={() => nudge(-1)}>←</button>
-        <button className={`absolute right-3 md:right-8 bottom-6 md:bottom-8 z-30 w-10 h-10 md:w-12 md:h-12 backdrop-blur-sm border rounded-lg flex items-center justify-center transition-colors text-sm md:text-base ${isDark ? "bg-white/60 border-void/10 text-void hover:bg-void/10" : "bg-black/60 border-white/10 text-white hover:bg-white/10"}`}
-          onClick={() => nudge(1)}>→</button>
-
-        <div className="absolute bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-          <span className={`font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase ${isDark ? "text-void/25" : "text-white/25"}`}>
+        {/* 底部导航控制器 (居中，避免挡住右下角的昼夜开关) */}
+        <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex items-center gap-4 md:gap-8">
+          <button className={`w-10 h-10 md:w-12 md:h-12 backdrop-blur-sm border rounded-lg flex items-center justify-center transition-colors text-sm md:text-base pointer-events-auto ${isDark ? "bg-white/60 border-black/10 text-black hover:bg-black/10" : "bg-black/60 border-white/10 text-white hover:bg-white/10"}`}
+            onClick={() => nudge(-1)}>←</button>
+          
+          <span className={`font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase pointer-events-none whitespace-nowrap ${isDark ? "text-black/30" : "text-white/25"}`}>
             {isMobile ? "← Swipe →" : "☝ Scroll to Explore ☝"}
           </span>
+
+          <button className={`w-10 h-10 md:w-12 md:h-12 backdrop-blur-sm border rounded-lg flex items-center justify-center transition-colors text-sm md:text-base pointer-events-auto ${isDark ? "bg-white/60 border-black/10 text-black hover:bg-black/10" : "bg-black/60 border-white/10 text-white hover:bg-white/10"}`}
+            onClick={() => nudge(1)}>→</button>
         </div>
       </div>
 
       {/* 导航 */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-4 md:px-12 py-4 md:py-5 flex justify-between items-center">
-        <div>
-          <h1 className={`text-base md:text-xl font-black tracking-tight transition-colors duration-700 ${titleColor}`}>
-            <ScrambleText text="影评社" />
-          </h1>
-          <span className={`font-mono text-[7px] md:text-[8px] tracking-[0.3em] md:tracking-[0.4em] uppercase transition-colors duration-700 ${isDark ? "text-void/20" : "text-white/20"}`}>Film Review Society</span>
+      <nav className="fixed top-0 left-0 right-0 z-50 px-4 md:px-12 py-4 md:py-5 flex justify-between items-center pointer-events-none">
+        <div className="group cursor-pointer flex items-center gap-3 md:gap-4 pointer-events-auto">
+          {/* 高级动态 Logo 图形 */}
+          <div className="relative flex items-center justify-center w-8 h-8 md:w-10 md:h-10">
+            <svg viewBox="0 0 100 100" className={`absolute inset-0 w-full h-full animate-[spin_20s_linear_infinite] transition-colors duration-700 ${isDark ? "text-black/80" : "text-white/80"}`}>
+              <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 6" />
+              <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="20 10" className="opacity-50" />
+            </svg>
+            <svg viewBox="0 0 100 100" className={`absolute inset-0 w-full h-full animate-[spin_15s_linear_infinite_reverse] transition-colors duration-700 ${isDark ? "text-black/60" : "text-white/60"}`}>
+              <circle cx="50" cy="50" r="25" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="2 4" />
+            </svg>
+            <div className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full transition-all duration-500 group-hover:scale-150 ${isDark ? "bg-black shadow-[0_0_10px_rgba(0,0,0,0.5)]" : "bg-white shadow-[0_0_10px_rgba(255,255,255,0.5)]"}`} />
+          </div>
+          <div className="flex flex-col">
+            <h1 className={`text-base md:text-xl font-black tracking-widest transition-colors duration-700 ${titleColor}`}>
+              <ScrambleText text="影评社" />
+            </h1>
+            <span className={`font-mono text-[7px] md:text-[8px] tracking-[0.3em] md:tracking-[0.4em] uppercase transition-colors duration-700 ${isDark ? "text-black/40" : "text-white/30"}`}>Film Review Society</span>
+          </div>
         </div>
-        <div className="flex items-center gap-3 md:gap-6">
-          <span className={`font-mono text-[9px] tracking-[0.3em] uppercase hidden md:block transition-colors duration-700 ${isDark ? "text-void/30" : "text-white/30"}`}>Selected Work</span>
+        <div className="flex items-center gap-3 md:gap-6 pointer-events-auto">
+          <span className={`font-mono text-[9px] tracking-[0.3em] uppercase hidden md:block transition-colors duration-700 ${isDark ? "text-black/40" : "text-white/30"}`}>Selected Work</span>
           <MagneticButton href="https://user.qzone.qq.com/3467086016" target="_blank" theme="mix">[ Contact ]</MagneticButton>
         </div>
       </nav>

@@ -88,11 +88,11 @@ export default function DeafeningArchivePage() {
                     {item.author}
                   </span>
                 </div>
-                <div className="relative z-10 mt-auto">
-                  <h2 className="text-3xl md:text-4xl font-black mb-5 leading-tight group-hover:translate-x-1 transition-transform">
+                <div className="relative z-10 flex-1 flex flex-col">
+                  <h2 className="text-2xl md:text-3xl font-black mb-4 leading-snug group-hover:translate-x-1 transition-transform line-clamp-2">
                     {item.title}
                   </h2>
-                  <p className="text-sm md:text-base text-paper/70 leading-relaxed line-clamp-5">
+                  <p className="text-xs md:text-sm text-paper/60 leading-relaxed line-clamp-3 mt-auto">
                     {item.excerpt}
                   </p>
                 </div>

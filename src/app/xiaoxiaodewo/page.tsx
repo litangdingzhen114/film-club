@@ -53,12 +53,12 @@ export default function XiaoxiaodewoFeaturedPage() {
           >
             <Link href={`/xiaoxiaodewo/archive/${art.id}`} className="block h-full cursor-none">
               <TiltCard className="h-full">
-                <article className="bg-paper/5 backdrop-blur-sm border border-paper/10 p-8 h-full flex flex-col hover:bg-paper/10 transition-all duration-500 group shadow-lg rounded-xl hover:border-paper/30">
+                <article className="bg-paper/5 border border-paper/10 p-8 h-full flex flex-col hover:bg-paper/10 transition-all duration-500 group shadow-lg rounded-xl">
                   <div className="font-mono text-xs opacity-40 mb-8 tracking-widest border-b border-paper/10 pb-4 flex justify-between">
                     <span>{String(index + 1).padStart(2, '0')}</span>
                     <span>{art.classInfo} · {art.author}</span>
                   </div>
-                  <h3 className="text-3xl md:text-4xl font-black mb-6 group-hover:opacity-80 transition-colors leading-tight line-clamp-2">{art.title}</h3>
+                  <h3 className="text-3xl md:text-4xl font-black mb-6 group-hover:text-paper transition-colors leading-tight">{art.title}</h3>
                   <p className="text-lg md:text-xl opacity-70 leading-relaxed line-clamp-5 mt-auto">{art.excerpt}</p>
                 </article>
               </TiltCard>
