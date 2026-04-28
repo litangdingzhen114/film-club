@@ -353,12 +353,12 @@ export default function InfiniteFilmStrip() {
             <h1 className={`text-base md:text-xl font-black tracking-widest transition-colors duration-700 ${titleColor}`}>
               <ScrambleText text="影评社" />
             </h1>
-            <span className={`font-mono text-[7px] md:text-[8px] tracking-[0.3em] md:tracking-[0.4em] uppercase transition-colors duration-700 ${isDark ? "text-black/40" : "text-white/30"}`}>Film Review Society</span>
+            <span className={`font-mono text-[7px] md:text-[8px] tracking-[0.3em] md:tracking-[0.4em] uppercase transition-colors duration-700 ${isDark ? "text-black/40" : "text-white/30"}`}>Film Review Club</span>
           </div>
         </div>
         <div className="flex items-center gap-3 md:gap-6 pointer-events-auto">
           <span className={`font-mono text-[9px] tracking-[0.3em] uppercase hidden md:block transition-colors duration-700 ${isDark ? "text-black/40" : "text-white/30"}`}>Selected Work</span>
-          <MagneticButton href="https://user.qzone.qq.com/3467086016" target="_blank" theme="mix">[ Contact ]</MagneticButton>
+          <MagneticButton href="https://user.qzone.qq.com/3467086016" target="_blank" theme={isDark ? "paper" : "mix"}>[ Contact ]</MagneticButton>
         </div>
       </nav>
 
