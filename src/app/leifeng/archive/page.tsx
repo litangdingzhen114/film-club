@@ -78,7 +78,7 @@ export default function LeifengArchivePage() {
             <Link key={item.id} href={`/leifeng/archive/${item.id}`} className="cursor-none">
               <motion.article
                 variants={itemVariants}
-                className="group relative border border-ink/10 bg-void/5 p-8 rounded-2xl h-[20rem] flex flex-col justify-between transition-all duration-500 hover:border-ink/30 hover:shadow-2xl overflow-hidden"
+                className="group relative border border-ink/10 bg-void/5 p-6 md:p-8 rounded-2xl h-full flex flex-col transition-all duration-500 hover:border-ink/30 hover:shadow-2xl overflow-hidden"
               >
                 <div className="font-mono text-[10px] tracking-widest text-ink opacity-40 uppercase mb-4 flex justify-between border-b border-ink/10 pb-2">
                   <span></span>
@@ -88,11 +88,11 @@ export default function LeifengArchivePage() {
                     {item.author}
                   </span>
                 </div>
-                <div className="relative z-10 flex-1 flex flex-col">
-                  <h2 className="text-2xl md:text-3xl font-serif font-bold mb-4 leading-snug group-hover:translate-x-1 transition-transform line-clamp-2">
+                <div className="relative z-10 flex flex-col gap-3 md:gap-4 mt-2">
+                  <h2 className="text-xl md:text-3xl font-serif font-bold leading-snug group-hover:translate-x-1 transition-transform line-clamp-2">
                     {item.title}
                   </h2>
-                  <p className="text-xs md:text-sm opacity-70 leading-relaxed line-clamp-3 mt-auto">
+                  <p className="text-xs md:text-sm opacity-70 leading-relaxed line-clamp-3">
                     {item.excerpt}
                   </p>
                 </div>

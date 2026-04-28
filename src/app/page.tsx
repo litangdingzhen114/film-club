@@ -229,7 +229,7 @@ export default function InfiniteFilmStrip() {
         <div className="absolute inset-0 z-0 transition-all duration-1000" style={{ background: bgGrad }} />
 
         {/* 标题 */}
-        <div className="absolute top-[8vh] md:top-[8vh] left-0 right-0 z-30 text-center pointer-events-none px-4">
+        <div className="absolute top-[16vh] md:top-[12vh] left-0 right-0 z-30 text-center pointer-events-none px-4">
           <AnimatePresence mode="wait">
             <motion.h2 key={activeFilm.id}
               initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
@@ -322,15 +322,15 @@ export default function InfiniteFilmStrip() {
         </div>
 
         {/* 底部导航控制器 (居中，避免挡住右下角的昼夜开关) */}
-        <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex items-center gap-4 md:gap-8">
-          <button className={`w-10 h-10 md:w-12 md:h-12 backdrop-blur-sm border rounded-lg flex items-center justify-center transition-colors text-sm md:text-base pointer-events-auto ${isDark ? "bg-white/60 border-black/10 text-black hover:bg-black/10" : "bg-black/60 border-white/10 text-white hover:bg-white/10"}`}
+        <div className="absolute bottom-6 md:bottom-10 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 md:gap-8">
+          <button className={`w-8 h-8 md:w-12 md:h-12 backdrop-blur-sm border rounded-lg flex items-center justify-center transition-colors text-xs md:text-base pointer-events-auto ${isDark ? "bg-white/60 border-black/10 text-black hover:bg-black/10" : "bg-black/60 border-white/10 text-white hover:bg-white/10"}`}
             onClick={() => nudge(-1)}>←</button>
           
-          <span className={`font-mono text-[9px] md:text-[10px] tracking-[0.3em] uppercase pointer-events-none whitespace-nowrap ${isDark ? "text-black/30" : "text-white/25"}`}>
+          <span className={`font-mono text-[8px] md:text-[10px] tracking-[0.2em] md:tracking-[0.3em] uppercase pointer-events-none whitespace-nowrap ${isDark ? "text-black/30" : "text-white/25"}`}>
             {isMobile ? "← Swipe →" : "☝ Scroll to Explore ☝"}
           </span>
 
-          <button className={`w-10 h-10 md:w-12 md:h-12 backdrop-blur-sm border rounded-lg flex items-center justify-center transition-colors text-sm md:text-base pointer-events-auto ${isDark ? "bg-white/60 border-black/10 text-black hover:bg-black/10" : "bg-black/60 border-white/10 text-white hover:bg-white/10"}`}
+          <button className={`w-8 h-8 md:w-12 md:h-12 backdrop-blur-sm border rounded-lg flex items-center justify-center transition-colors text-xs md:text-base pointer-events-auto ${isDark ? "bg-white/60 border-black/10 text-black hover:bg-black/10" : "bg-black/60 border-white/10 text-white hover:bg-white/10"}`}
             onClick={() => nudge(1)}>→</button>
         </div>
       </div>
